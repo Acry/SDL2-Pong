@@ -12,6 +12,7 @@ Screenshot:
 ![Screenshot](./screenshot.jpg)
 
 Useful links:  
+[classic Pong and Breakout stuff](https://github.com/Acry/SDL2-pong_issue-01)  
 [SDL2](https://www.libsdl.org/)   [SDL-Discourse](https://discourse.libsdl.org)   [More Example Code](https://gist.github.com/Acry/baa861b8e370c6eddbb18519c487d9d8)
 
 [Get in touch on SDL-Discourse](https://discourse.libsdl.org/u/Acry/summary)

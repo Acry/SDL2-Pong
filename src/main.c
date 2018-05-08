@@ -285,7 +285,7 @@ void ai1_update(void)
 	//SDL_Log("db: %f", db);
 	
 	//var "visibility"
-	float range=dp/db;
+	float range_ratio = db/dp;
 	
 	float pc = p1.cur.y+(p1.dst.h/2);
 	float bc = Ball.cur.y+(Ball.dst.h/2);
@@ -297,15 +297,12 @@ void ai1_update(void)
 	if (timer >= AI_REACTION){
 // 		SDL_Log("range: %f", range);
 		if (Ball.dir==0){
-			if (range > 1.33){
-// 				SDL_Log("vis");
-				
+			if (range_ratio < .5){
 				if(p1.cur.y+Ball.dst.h < bc){
 					p1.cur.vy =  (paddle_speed*ms);
 					timer=0;
 					return;
 				}
-				
 				if(p1.cur.y-Ball.dst.h > bc){
 					p1.cur.vy = -(paddle_speed*ms);
 					timer=0;
@@ -319,15 +316,13 @@ void ai1_update(void)
 		}
 		
 		//Repositioning
-		if (Ball.dir==1&&(range > 1.7)){
-// 			SDL_Log("repos");
+		if (Ball.dir==1&&(range_ratio < .5)){
 			dz=p1.dst.h/2;
 			if (pc < (wh/2)-dz){
 				p1.cur.vy =  paddle_speed*ms;
 				timer=0;
 				return;
 			}
-			
 			if (pc > (wh/2)+dz){
 				p1.cur.vy = -(paddle_speed*ms);
 				timer=0;
@@ -354,7 +349,7 @@ void ai2_update(void)
 	//SDL_Log("db: %f", db);
 	
 	//var "visibility"
-	float range=dp/db;
+	float range_ratio = db/dp;
 	
 	float pc = p2.cur.y+(p2.dst.h/2);
 	float bc = Ball.cur.y+(Ball.dst.h/2);
@@ -366,7 +361,7 @@ void ai2_update(void)
 	if (timer >= AI_REACTION){
 // 		SDL_Log("range: %f", range);
 		if (Ball.dir==1){
-			if (range > 1.33){
+			if (range_ratio < .5){
 				//SDL_Log("vis");
 				
 				if(p2.cur.y+Ball.dst.h < bc){
@@ -388,7 +383,7 @@ void ai2_update(void)
 		}
 		
 		//Repositioning
-		if (Ball.dir==0&&(range > 1.7)){
+		if (Ball.dir==0&&(range_ratio < .5)){
 			//SDL_Log("repos");
 			dz=p2.dst.h/2;
 			if (pc < (wh/2)-dz){

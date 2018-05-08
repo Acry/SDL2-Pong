@@ -1,5 +1,10 @@
 This is a simple pong implementation.  
 AI, State Integration and timing needs love.  
+You can build 2 executeables. One with static size,  
+which is easier to review and a second version which  
+scales in size - so you can play it in stamp size or  
+UHD =)
+
 But this may be done later with subpixel rendering.  
 
 AI-notes:  

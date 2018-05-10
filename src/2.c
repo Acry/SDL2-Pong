@@ -50,12 +50,12 @@
 #define RES_H 		(RES_W/16)*9
 
 #define END_SCORE 	10
-#define PADDLE_SPEED 	900
+#define PADDLE_SPEED 	1000
 #define PADDLE_SIZE	100
 #define BALL_SPEED 	800
 #define BALL_SIZE	15
 #define AFK_TIMER 	8000
-#define AI_REACTION 	150
+#define AI_REACTION 	100
 //END   CPP DEFINITIONS
 
 //BEGIN DATASTRUCTURES
@@ -304,18 +304,25 @@ void scale_all(void)
 	scale_entity_static(&divider);
 	scale_entity_static(&game_over);
 	scale_entity_static(&paused);
+	
+	//BEGIN P1
 	scale_entity_static(&p1.dyn.data);
 	p1.dyn.vel.x=action_area.frac.size.x * (p1.dyn.vel.x/action_area.frac_prev.size.x);
 	p1.dyn.vel.y=action_area.frac.size.y * (p1.dyn.vel.y/action_area.frac_prev.size.y);
 	scale_entity_static(&p1.ava);
 	scale_entity_static(&p1.score);
 	scale_entity_static(&p1.go);
+	//END P1
+	
+	//BEGIN P2
 	scale_entity_static(&p2.dyn.data);
 	p2.dyn.vel.x=action_area.frac.size.x * (p2.dyn.vel.x/action_area.frac_prev.size.x);
 	p2.dyn.vel.y=action_area.frac.size.y * (p2.dyn.vel.y/action_area.frac_prev.size.y);
 	scale_entity_static(&p2.ava);
 	scale_entity_static(&p2.score);
 	scale_entity_static(&p2.go);
+	//END 	P2
+	
 	scale_entity_static(&ball.dyn.data);
 	ball_speed   = (float)BALL_SPEED  * current_scale;
 	ball.dyn.vel.x=action_area.frac.size.x * (ball.dyn.vel.x/action_area.frac_prev.size.x);
@@ -381,7 +388,7 @@ void scale_ref_area(void)
 	}
 	
 	SDL_RenderSetClipRect(Renderer, &action_area.dst);
-	SDL_Log("clip w: %d h: %d x: %d y: %d", action_area.dst.w, action_area.dst.h, action_area.dst.x, action_area.dst.y);
+// 	SDL_Log("clip w: %d h: %d x: %d y: %d", action_area.dst.w, action_area.dst.h, action_area.dst.x, action_area.dst.y);
 }
 
 int gcd (int a, int b)
@@ -444,7 +451,7 @@ void ai1_update(void)
 // 	SDL_Log("range_ratio: %f", range_ratio);
 	
 	float pc = p1.dyn.data.frac.pos.y+(p1.dyn.data.dst.h/2);
-	float bc = ball.dyn.data.frac.pos.y+(ball.dyn.data.dst.h/2);
+	float bc = ball.dyn.data.frac.pos.y+(ball.dyn.data.frac.size.y/2);
 	
 	float dz=p1.dyn.data.dst.h/3;
 	static Uint32 timer = 0;
@@ -453,17 +460,16 @@ void ai1_update(void)
 	if (timer >= AI_REACTION){
 		if (ball.dir==0){
 			if (range_ratio < .5){
-				if(p1.dyn.data.frac.pos.y+ball.dyn.data.dst.h < bc){
+				if(p1.dyn.data.frac.pos.y+ball.dyn.data.frac.size.y < bc){
 					p1.dyn.vel.y =  (paddle_speed*ms);
 					timer=0;
 					return;
 				}
-				if(p1.dyn.data.frac.pos.y-ball.dyn.data.dst.h > bc){
+				if(p1.dyn.data.frac.pos.y-ball.dyn.data.frac.size.y > bc){
 					p1.dyn.vel.y = -(paddle_speed*ms);
 					timer=0;
 					return;
 				}
-
 				p1.dyn.vel.y=0;
 				timer=0;
 				return;
@@ -502,7 +508,7 @@ void ai2_update(void)
 // 	SDL_Log("dp: %f", dp);
 	
 	//ball distance
-	float db=p2.dyn.data.frac.pos.x-(ball.dyn.data.frac.pos.x+ball.dyn.data.dst.w);
+	float db=p2.dyn.data.frac.pos.x-(ball.dyn.data.frac.pos.x+ball.dyn.data.frac.size.x);
 
 	//var "visibility"
 	float range_ratio = db/dp;
@@ -510,7 +516,7 @@ void ai2_update(void)
 	
 	//Centers
 	float pc = p2.dyn.data.frac.pos.y+(p2.dyn.data.dst.h/2);
-	float bc = ball.dyn.data.frac.pos.y+(ball.dyn.data.dst.h/2);
+	float bc = ball.dyn.data.frac.pos.y+(ball.dyn.data.frac.size.y/2);
 	
 	float dz=p2.dyn.data.dst.h/3;
 	static Uint32 timer = 0;
@@ -518,13 +524,13 @@ void ai2_update(void)
 	if (timer >= AI_REACTION){
 		if (ball.dir==1){
 			if (range_ratio < .5){
-				if(p2.dyn.data.frac.pos.y+ball.dyn.data.dst.h < bc){
+				if(p2.dyn.data.frac.pos.y+ball.dyn.data.frac.size.y < bc){
 					p2.dyn.vel.y =  (paddle_speed*ms);
 					timer=0;
 					return;
 				}
 				
-				if(p2.dyn.data.frac.pos.y-ball.dyn.data.dst.h > bc){
+				if(p2.dyn.data.frac.pos.y-ball.dyn.data.frac.size.y > bc){
 					p2.dyn.vel.y = -(paddle_speed*ms);
 					timer=0;
 					return;
@@ -653,7 +659,6 @@ void ball_reset(void)
 	ball.dyn.data.frac.pos.x = (action_area.frac.size.x/2)-(ball.dyn.data.frac.size.x/2);
 	ball.dyn.data.frac.pos.y = (action_area.frac.size.y/2)-(ball.dyn.data.frac.size.y/2);
 	rect_round(&ball.dyn.data);
-	
 
 }
 //END 	GAMEPLAY
@@ -709,10 +714,10 @@ void IdleReady(void)
 {
 
 	//BEGIN DIVIDER
-	divider.frac.size.x = 2;
-	divider.frac.size.y = 8;
+	divider.frac.size.x = 3;
+	divider.frac.size.y = 9;
 	divider.frac.pos.x = (action_area.frac.size.x/2)-1;
-	divider.frac.pos.y = 4;
+	divider.frac.pos.y = divider.frac.size.y;
 	//END DIVIDER
 	
 	p1.dyn.data.frac.size.x = PADDLE_SIZE/10;
@@ -1226,17 +1231,21 @@ void Game_overReady(void)
 	char 		string1[]={"Player 1 won"};
 	temp_surface = TTF_RenderText_Solid(font, string1, color);
 	p1.go.Texture = SDL_CreateTextureFromSurface(Renderer,temp_surface );
-	SDL_QueryTexture(p1.go.Texture, NULL, NULL, &p1.go.dst.w, &p1.go.dst.h);
-	p1.go.dst.x=(ww/2)-(p1.go.dst.w/2)-14;
-	p1.go.dst.y=(wh/2)+(p1.go.dst.h/2);
+	SDL_QueryTexture(p1.go.Texture, NULL, NULL, &w, &h);
+	p1.go.frac.size.x=w;
+	p1.go.frac.size.y=h;
+	p1.go.frac.pos.x=action_area.frac.size.x/2-p1.go.frac.size.x/2-14;
+	p1.go.frac.pos.y=action_area.frac.size.y/2+p1.go.frac.size.y/2;
 	
 	char 		string2[]={"Player 2 won"};
 	
 	temp_surface = TTF_RenderText_Solid(font, string2, color);
 	p2.go.Texture = SDL_CreateTextureFromSurface(Renderer,temp_surface );
-	SDL_QueryTexture(p2.go.Texture, NULL, NULL, &p2.go.dst.w, &p2.go.dst.h);
-	p2.go.dst.x=(ww/2)-(p2.go.dst.w/2)-14;
-	p2.go.dst.y=(wh/2)+(p2.go.dst.h/2);
+	SDL_QueryTexture(p2.go.Texture, NULL, NULL, &w, &h);
+	p2.go.frac.size.x=w;
+	p2.go.frac.size.y=h;
+	p2.go.frac.pos.x=action_area.frac.size.x/2-p2.go.frac.size.x/2-14;
+	p2.go.frac.pos.y=action_area.frac.size.y/2+p2.go.frac.size.y/2;
 	
 }
 

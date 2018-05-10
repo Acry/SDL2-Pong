@@ -304,7 +304,9 @@ void scale_all(void)
 	scale_entity_static(&divider);
 	scale_entity_static(&game_over);
 	scale_entity_static(&paused);
-	
+
+	paddle_speed = (float)PADDLE_SPEED * current_scale;
+
 	//BEGIN P1
 	scale_entity_static(&p1.dyn.data);
 	p1.dyn.vel.x=action_area.frac.size.x * (p1.dyn.vel.x/action_area.frac_prev.size.x);
@@ -714,9 +716,9 @@ void IdleReady(void)
 {
 
 	//BEGIN DIVIDER
-	divider.frac.size.x = 3;
-	divider.frac.size.y = 9;
-	divider.frac.pos.x = (action_area.frac.size.x/2)-1;
+	divider.frac.size.x = 5;
+	divider.frac.size.y = 12;
+	divider.frac.pos.x = (action_area.frac.size.x/2)-divider.frac.size.x/2;
 	divider.frac.pos.y = divider.frac.size.y;
 	//END DIVIDER
 	
@@ -744,8 +746,8 @@ void IdleReady(void)
 
 	ball.dyn.data.frac.size.x = BALL_SIZE;
 	ball.dyn.data.frac.size.y = BALL_SIZE;
-	ball.dyn.data.frac.pos.x = (action_area.frac.size.x/2)-(ball.dyn.data.frac.size.x/2);
-	ball.dyn.data.frac.pos.y = (action_area.frac.size.y/2)-(ball.dyn.data.frac.size.y/2);
+	ball.dyn.data.frac.pos.x = (action_area.frac.size.x/2)-(ball.dyn.data.frac.size.x/2)-ball.dyn.data.frac.size.x/2;
+	ball.dyn.data.frac.pos.y = (action_area.frac.size.y/2)-(ball.dyn.data.frac.size.y/2)-ball.dyn.data.frac.size.y/2;
 
 	
 }

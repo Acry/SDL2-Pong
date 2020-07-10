@@ -9,11 +9,10 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
-SDL_Window   *Window;
-SDL_Renderer *Renderer;
+extern SDL_Window   *Window;
+extern SDL_Renderer *Renderer;
+extern bool running;
 bool  openDisplay	 (const char title[], int width, int height);
 void  updateDisplay	 (void);
 void  closeDisplay	 (void);
-
-bool running;
 #endif

@@ -1,6 +1,8 @@
 #include "helper.h"
-SDL_Window   	*Window	  = NULL;
-SDL_Renderer 	*Renderer = NULL;
+
+SDL_Window   	*Window;
+SDL_Renderer 	*Renderer;
+bool running;
 
 bool openDisplay(const char title[], int width, int height)
 {

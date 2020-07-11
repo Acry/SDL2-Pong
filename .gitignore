@@ -1,0 +1,7 @@
+*.dll
+.kdev4/
+LICENSE.zlib.txt
+pong
+pong_W64.exe
+pong_s
+pong_s_w64.exe

@@ -1,7 +1,8 @@
+# Linux compiler and linker flags
 CFLAGS   = -Wall -Wextra -mtune=native -no-pie `sdl2-config --cflags`
 LDFLAGS  = `sdl2-config --libs` -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm 
 
-#Win 64 build
+# Win 64 build flags
 CCW64 	  = x86_64-w64-mingw32-gcc
 CFLAGS3   = -Wall -Wextra `x86_64-w64-mingw32-sdl2-config --cflags`
 LDFLAGS3  = `x86_64-w64-mingw32-sdl2-config --libs` -lSDL2_image -lSDL2_mixer -lSDL2_ttf
@@ -27,4 +28,3 @@ pong_s_w64.exe:   $(srcdir)helper2.c $(srcdir)2.c
 .PHONY: clean
 clean:
 	@rm $(TARGETS) 2>/dev/null || true
-

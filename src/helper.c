@@ -12,6 +12,7 @@ bool openDisplay(const char title[], int width, int height)
 	{
 		return false;
 	}
+	SDL_ShowCursor(SDL_DISABLE);
 	TTF_Init();
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	srand(time(NULL));
